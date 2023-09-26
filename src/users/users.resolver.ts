@@ -37,7 +37,7 @@ export class UsersResolver {
     return this.usersService.createAccount(createAccountInput);
   }
 
-  @Mutation((retunrs) => LoginOutput)
+  @Mutation((returns) => LoginOutput)
   login(@Args('input') loginInput: LoginInput): Promise<LoginOutput> {
     return this.usersService.login(loginInput);
   }
