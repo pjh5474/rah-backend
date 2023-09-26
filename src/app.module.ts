@@ -16,6 +16,10 @@ import { JwtModule } from './jwt/jwt.module';
 import { JwtMiddleWare } from './jwt/jwt.middleware';
 import { Verification } from './users/entities/veritication.entity';
 import { EmailModule } from './email/email.module';
+import { AuthModule } from './auth/auth.module';
+import { StoresModule } from './stores/stores.module';
+import { Store } from './stores/entities/store.entity';
+import { Category } from './stores/entities/category.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -44,7 +48,7 @@ import { EmailModule } from './email/email.module';
       synchronize: process.env.NODE_ENV !== 'prod',
       logging:
         process.env.NODE_ENV !== 'prod' && process.env.NODE_ENV !== 'test',
-      entities: [User, Verification],
+      entities: [User, Verification, Store, Category],
     }),
     GraphQLModule.forRoot({
       driver: ApolloDriver,
@@ -65,7 +69,9 @@ import { EmailModule } from './email/email.module';
         from: process.env.EMAIL_USER,
       },
     }),
+    AuthModule,
     EmailModule,
+    StoresModule,
   ],
   controllers: [],
   providers: [],
