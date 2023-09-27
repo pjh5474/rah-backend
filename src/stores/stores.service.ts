@@ -9,6 +9,7 @@ import { CategoryRepository } from './repositories/category.repository';
 import { EditStoreInput, EditStoreOutput } from './dtos/edit-store.dto';
 import { DeleteStoreInput, DeleteStoreOutput } from './dtos/delete-store.dto';
 import { AllCategoriesOutput } from './dtos/all-categories.dto';
+import { CategoryInput, CategoryOutput } from './dtos/category.dto';
 
 @Injectable()
 export class StoresService {
@@ -147,5 +148,30 @@ export class StoresService {
         },
       },
     });
+  }
+
+  async findCategoryBySlug({ slug }: CategoryInput): Promise<CategoryOutput> {
+    try {
+      const category = await this.categories.findOne({
+        where: { slug },
+        relations: ['stores'],
+      });
+      if (!category) {
+        return {
+          ok: false,
+          error: 'Category not found',
+        };
+      }
+
+      return {
+        ok: true,
+        category,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not load category',
+      };
+    }
   }
 }
