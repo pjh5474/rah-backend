@@ -7,6 +7,7 @@ import { User } from 'src/users/entities/user.entity';
 import { Category } from './entities/category.entity';
 import { CategoryRepository } from './repositories/category.repository';
 import { EditStoreInput, EditStoreOutput } from './dtos/edit-store.dto';
+import { DeleteStoreInput, DeleteStoreOutput } from './dtos/delete-store.dto';
 
 @Injectable()
 export class StoresService {
@@ -84,6 +85,40 @@ export class StoresService {
       return {
         ok: false,
         error: 'Could not edit store',
+      };
+    }
+  }
+
+  async deleteStore(
+    creator: User,
+    { storeId }: DeleteStoreInput,
+  ): Promise<DeleteStoreOutput> {
+    try {
+      const store = await this.stores.findOne({
+        where: { id: storeId },
+      });
+      if (!store) {
+        return {
+          ok: false,
+          error: 'Store not found',
+        };
+      }
+
+      if (creator.id !== store.creatorId) {
+        return {
+          ok: false,
+          error: 'You can not delete a store that you do not own',
+        };
+      }
+
+      await this.stores.delete(storeId);
+      return {
+        ok: true,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not delete store',
       };
     }
   }
