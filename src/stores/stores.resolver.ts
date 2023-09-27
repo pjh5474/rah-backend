@@ -5,6 +5,7 @@ import { StoresService } from './stores.service';
 import { AuthUser } from 'src/auth/auth-user.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { Role } from 'src/auth/role.decorator';
+import { EditStoreInput, EditStoreOutput } from './dtos/edit-store.dto';
 
 @Resolver((of) => Store)
 export class StoresResolver {
@@ -17,5 +18,14 @@ export class StoresResolver {
     @Args('input') createStoreInput: CreateStoreInput,
   ): Promise<CreateStoreOutput> {
     return this.storesService.createStore(authUser, createStoreInput);
+  }
+
+  @Mutation((returns) => EditStoreOutput)
+  @Role(['Creator'])
+  editStore(
+    @AuthUser() authUser: User,
+    @Args('input') editStoreInput: EditStoreInput,
+  ): Promise<EditStoreOutput> {
+    return this.storesService.editStore(authUser, editStoreInput);
   }
 }
