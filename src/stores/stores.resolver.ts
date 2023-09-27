@@ -1,4 +1,12 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Int,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { CreateStoreInput, CreateStoreOutput } from './dtos/create-store.dto';
 import { Store } from './entities/store.entity';
 import { StoresService } from './stores.service';
@@ -7,6 +15,8 @@ import { User } from 'src/users/entities/user.entity';
 import { Role } from 'src/auth/role.decorator';
 import { EditStoreInput, EditStoreOutput } from './dtos/edit-store.dto';
 import { DeleteStoreInput, DeleteStoreOutput } from './dtos/delete-store.dto';
+import { Category } from './entities/category.entity';
+import { AllCategoriesOutput } from './dtos/all-categories.dto';
 
 @Resolver((of) => Store)
 export class StoresResolver {
@@ -37,5 +47,20 @@ export class StoresResolver {
     @Args('input') deleteStoreInput: DeleteStoreInput,
   ): Promise<DeleteStoreOutput> {
     return this.storesService.deleteStore(authUser, deleteStoreInput);
+  }
+}
+
+@Resolver((of) => Category)
+export class CategoryResolver {
+  constructor(private readonly storesService: StoresService) {}
+
+  @ResolveField((type) => Int)
+  storeCount(@Parent() category: Category): Promise<number> {
+    return this.storesService.countStores(category);
+  }
+
+  @Query((returns) => AllCategoriesOutput)
+  allCategories(): Promise<AllCategoriesOutput> {
+    return this.storesService.allCategories();
   }
 }

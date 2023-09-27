@@ -8,6 +8,7 @@ import { Category } from './entities/category.entity';
 import { CategoryRepository } from './repositories/category.repository';
 import { EditStoreInput, EditStoreOutput } from './dtos/edit-store.dto';
 import { DeleteStoreInput, DeleteStoreOutput } from './dtos/delete-store.dto';
+import { AllCategoriesOutput } from './dtos/all-categories.dto';
 
 @Injectable()
 export class StoresService {
@@ -121,5 +122,30 @@ export class StoresService {
         error: 'Could not delete store',
       };
     }
+  }
+
+  async allCategories(): Promise<AllCategoriesOutput> {
+    try {
+      const categories = await this.categories.find();
+      return {
+        ok: true,
+        categories,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not load categories',
+      };
+    }
+  }
+
+  countStores(category: Category) {
+    return this.stores.count({
+      where: {
+        category: {
+          id: category.id,
+        },
+      },
+    });
   }
 }
