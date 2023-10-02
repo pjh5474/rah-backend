@@ -150,7 +150,10 @@ export class StoresService {
     });
   }
 
-  async findCategoryBySlug({ slug }: CategoryInput): Promise<CategoryOutput> {
+  async findCategoryBySlug({
+    slug,
+    page,
+  }: CategoryInput): Promise<CategoryOutput> {
     try {
       const category = await this.categories.findOne({
         where: { slug },
@@ -163,9 +166,23 @@ export class StoresService {
         };
       }
 
+      const stores = await this.stores.find({
+        where: {
+          category: {
+            id: category.id,
+          },
+        },
+        take: 25,
+        skip: (page - 1) * 25,
+      });
+
+      const totalResults = await this.countStores(category);
+
       return {
         ok: true,
         category,
+        stores,
+        totalPages: Math.ceil(totalResults / 25),
       };
     } catch {
       return {
