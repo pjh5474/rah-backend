@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateStoreInput, CreateStoreOutput } from './dtos/create-store.dto';
 import { Store } from './entities/store.entity';
 import { User } from 'src/users/entities/user.entity';
@@ -11,8 +11,6 @@ import { DeleteStoreInput, DeleteStoreOutput } from './dtos/delete-store.dto';
 import { AllCategoriesOutput } from './dtos/all-categories.dto';
 import { CategoryInput, CategoryOutput } from './dtos/category.dto';
 import { StoresInput, StoresOutput } from './dtos/stores.dto';
-import { StoreInput, StoreOutput } from './dtos/store.dto';
-import { SearchStoreInput, SearchStoreOutput } from './dtos/search-store.dto';
 
 @Injectable()
 export class StoresService {
@@ -212,60 +210,6 @@ export class StoresService {
       return {
         ok: false,
         error: 'Could not load stores',
-      };
-    }
-  }
-
-  async findStoreById({ storeId }: StoreInput): Promise<StoreOutput> {
-    try {
-      const store = await this.stores.findOne({
-        where: {
-          id: storeId,
-        },
-      });
-
-      if (!store) {
-        return {
-          ok: false,
-          error: 'Store not found',
-        };
-      }
-
-      return {
-        ok: true,
-        store,
-      };
-    } catch {
-      return {
-        ok: false,
-        error: 'Could not load store',
-      };
-    }
-  }
-
-  async searchStoreByName({
-    query,
-    page,
-  }: SearchStoreInput): Promise<SearchStoreOutput> {
-    try {
-      const [stores, totalResults] = await this.stores.findAndCount({
-        where: {
-          name: ILike(`%${query}%`),
-        },
-        take: 25,
-        skip: (page - 1) * 25,
-      });
-
-      return {
-        ok: true,
-        stores,
-        totalPages: Math.ceil(totalResults / 25),
-        totalResults,
-      };
-    } catch {
-      return {
-        ok: false,
-        error: 'Could not search for stores',
       };
     }
   }
