@@ -11,5 +11,5 @@ export class StoresInput extends PaginationInput {}
 @ObjectType()
 export class StoresOutput extends PaginationOutput {
   @Field((type) => [Store], { nullable: true })
-  stores?: Store[];
+  results?: Store[];
 }

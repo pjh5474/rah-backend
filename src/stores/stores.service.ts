@@ -13,12 +13,28 @@ import { CategoryInput, CategoryOutput } from './dtos/category.dto';
 import { StoresInput, StoresOutput } from './dtos/stores.dto';
 import { StoreInput, StoreOutput } from './dtos/store.dto';
 import { SearchStoreInput, SearchStoreOutput } from './dtos/search-store.dto';
+import { Commission } from './entities/commission.entity';
+import {
+  CreateCommissionInput,
+  CreateCommissionOutput,
+} from './dtos/create-commission.dto';
+import {
+  EditCommissionInput,
+  EditCommissionOutput,
+} from './dtos/edit-commission.dto';
+import {
+  DeleteCommissionInput,
+  DeleteCommissionOutput,
+} from './dtos/delete-commission.dto';
 
 @Injectable()
 export class StoresService {
   constructor(
     @InjectRepository(Store)
     private readonly stores: Repository<Store>,
+
+    @InjectRepository(Commission)
+    private readonly commissions: Repository<Commission>,
 
     private readonly categories: CategoryRepository,
   ) {}
@@ -204,7 +220,7 @@ export class StoresService {
 
       return {
         ok: true,
-        stores,
+        results: stores,
         totalPages: Math.ceil(totalResults / 25),
         totalResults,
       };
@@ -222,6 +238,7 @@ export class StoresService {
         where: {
           id: storeId,
         },
+        relations: ['commissions'],
       });
 
       if (!store) {
@@ -266,6 +283,134 @@ export class StoresService {
       return {
         ok: false,
         error: 'Could not search for stores',
+      };
+    }
+  }
+
+  async createCommission(
+    creator: User,
+    createCommissionInput: CreateCommissionInput,
+  ): Promise<CreateCommissionOutput> {
+    try {
+      const store = await this.stores.findOne({
+        where: {
+          id: createCommissionInput.storeId,
+        },
+      });
+
+      if (!store) {
+        return {
+          ok: false,
+          error: 'Store not found',
+        };
+      }
+
+      if (creator.id !== store.creatorId) {
+        return {
+          ok: false,
+          error:
+            'You can not create a commission for a store that you do not own',
+        };
+      }
+
+      await this.commissions.save(
+        this.commissions.create({
+          ...createCommissionInput,
+          store,
+        }),
+      );
+
+      return {
+        ok: true,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not create commission',
+      };
+    }
+  }
+
+  async deleteCommission(
+    creator: User,
+    { commissionId }: DeleteCommissionInput,
+  ): Promise<DeleteCommissionOutput> {
+    try {
+      const commission = await this.commissions.findOne({
+        where: {
+          id: commissionId,
+        },
+        relations: ['store'],
+      });
+
+      if (!commission) {
+        return {
+          ok: false,
+          error: 'Commission not found',
+        };
+      }
+
+      if (creator.id !== commission.store.creatorId) {
+        return {
+          ok: false,
+          error:
+            'You can not delete a commission for a store that you do not own',
+        };
+      }
+
+      await this.commissions.delete(commissionId);
+      return {
+        ok: true,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not delete commission',
+      };
+    }
+  }
+
+  async editCommission(
+    creator: User,
+    editCommissionInput: EditCommissionInput,
+  ): Promise<EditCommissionOutput> {
+    try {
+      const commission = await this.commissions.findOne({
+        where: {
+          id: editCommissionInput.commissionId,
+        },
+        relations: ['store'],
+      });
+
+      if (!commission) {
+        return {
+          ok: false,
+          error: 'Commission not found',
+        };
+      }
+
+      if (creator.id !== commission.store.creatorId) {
+        return {
+          ok: false,
+          error:
+            'You can not edit a commission for a store that you do not own',
+        };
+      }
+
+      await this.commissions.save([
+        {
+          id: editCommissionInput.commissionId,
+          ...editCommissionInput,
+        },
+      ]);
+
+      return {
+        ok: true,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not edit commission',
       };
     }
   }

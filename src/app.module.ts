@@ -20,6 +20,7 @@ import { AuthModule } from './auth/auth.module';
 import { StoresModule } from './stores/stores.module';
 import { Store } from './stores/entities/store.entity';
 import { Category } from './stores/entities/category.entity';
+import { Commission } from './stores/entities/commission.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -48,7 +49,7 @@ import { Category } from './stores/entities/category.entity';
       synchronize: process.env.NODE_ENV !== 'prod',
       logging:
         process.env.NODE_ENV !== 'prod' && process.env.NODE_ENV !== 'test',
-      entities: [User, Verification, Store, Category],
+      entities: [User, Verification, Store, Category, Commission],
     }),
     GraphQLModule.forRoot({
       driver: ApolloDriver,

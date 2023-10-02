@@ -21,6 +21,19 @@ import { CategoryInput, CategoryOutput } from './dtos/category.dto';
 import { StoresInput, StoresOutput } from './dtos/stores.dto';
 import { StoreInput, StoreOutput } from './dtos/store.dto';
 import { SearchStoreInput, SearchStoreOutput } from './dtos/search-store.dto';
+import { Commission } from './entities/commission.entity';
+import {
+  CreateCommissionInput,
+  CreateCommissionOutput,
+} from './dtos/create-commission.dto';
+import {
+  EditCommissionInput,
+  EditCommissionOutput,
+} from './dtos/edit-commission.dto';
+import {
+  DeleteCommissionInput,
+  DeleteCommissionOutput,
+} from './dtos/delete-commission.dto';
 
 @Resolver((of) => Store)
 export class StoresResolver {
@@ -90,5 +103,37 @@ export class CategoryResolver {
     @Args('input') searchStoreInput: SearchStoreInput,
   ): Promise<SearchStoreOutput> {
     return this.storesService.searchStoreByName(searchStoreInput);
+  }
+}
+
+@Resolver(Commission)
+export class CommissionResolver {
+  constructor(private readonly storesService: StoresService) {}
+
+  @Mutation((returns) => CreateCommissionOutput)
+  @Role(['Creator'])
+  createCommission(
+    @AuthUser() authUser: User,
+    @Args('input') createCommissionInput: CreateCommissionInput,
+  ): Promise<CreateCommissionOutput> {
+    return this.storesService.createCommission(authUser, createCommissionInput);
+  }
+
+  @Mutation((returns) => DeleteCommissionOutput)
+  @Role(['Creator'])
+  deleteCommission(
+    @AuthUser() authUser: User,
+    @Args('input') deleteCommissionInput: DeleteCommissionInput,
+  ): Promise<DeleteCommissionOutput> {
+    return this.storesService.deleteCommission(authUser, deleteCommissionInput);
+  }
+
+  @Mutation((returns) => EditCommissionOutput)
+  @Role(['Creator'])
+  editCommission(
+    @AuthUser() authUser: User,
+    @Args('input') editcommissionInput: EditCommissionInput,
+  ): Promise<EditCommissionOutput> {
+    return this.storesService.editCommission(authUser, editcommissionInput);
   }
 }
