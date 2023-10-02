@@ -10,6 +10,7 @@ import { EditStoreInput, EditStoreOutput } from './dtos/edit-store.dto';
 import { DeleteStoreInput, DeleteStoreOutput } from './dtos/delete-store.dto';
 import { AllCategoriesOutput } from './dtos/all-categories.dto';
 import { CategoryInput, CategoryOutput } from './dtos/category.dto';
+import { StoresInput, StoresOutput } from './dtos/stores.dto';
 
 @Injectable()
 export class StoresService {
@@ -188,6 +189,27 @@ export class StoresService {
       return {
         ok: false,
         error: 'Could not load category',
+      };
+    }
+  }
+
+  async allStores({ page }: StoresInput): Promise<StoresOutput> {
+    try {
+      const [stores, totalResults] = await this.stores.findAndCount({
+        take: 25,
+        skip: (page - 1) * 25,
+      });
+
+      return {
+        ok: true,
+        stores,
+        totalPages: Math.ceil(totalResults / 25),
+        totalResults,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not load stores',
       };
     }
   }

@@ -18,6 +18,7 @@ import { DeleteStoreInput, DeleteStoreOutput } from './dtos/delete-store.dto';
 import { Category } from './entities/category.entity';
 import { AllCategoriesOutput } from './dtos/all-categories.dto';
 import { CategoryInput, CategoryOutput } from './dtos/category.dto';
+import { StoresInput, StoresOutput } from './dtos/stores.dto';
 
 @Resolver((of) => Store)
 export class StoresResolver {
@@ -70,5 +71,10 @@ export class CategoryResolver {
     @Args('input') categoryInput: CategoryInput,
   ): Promise<CategoryOutput> {
     return this.storesService.findCategoryBySlug(categoryInput);
+  }
+
+  @Query((returns) => StoresOutput)
+  stores(@Args('input') storesInput: StoresInput): Promise<StoresOutput> {
+    return this.storesService.allStores(storesInput);
   }
 }
