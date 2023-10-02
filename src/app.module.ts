@@ -21,6 +21,9 @@ import { StoresModule } from './stores/stores.module';
 import { Store } from './stores/entities/store.entity';
 import { Category } from './stores/entities/category.entity';
 import { Commission } from './stores/entities/commission.entity';
+import { OrdersModule } from './orders/orders.module';
+import { Order } from './orders/entities/order.entity';
+import { OrderItem } from './orders/entities/order-item.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -49,7 +52,15 @@ import { Commission } from './stores/entities/commission.entity';
       synchronize: process.env.NODE_ENV !== 'prod',
       logging:
         process.env.NODE_ENV !== 'prod' && process.env.NODE_ENV !== 'test',
-      entities: [User, Verification, Store, Category, Commission],
+      entities: [
+        User,
+        Verification,
+        Store,
+        Category,
+        Commission,
+        Order,
+        OrderItem,
+      ],
     }),
     GraphQLModule.forRoot({
       driver: ApolloDriver,
@@ -73,6 +84,7 @@ import { Commission } from './stores/entities/commission.entity';
     AuthModule,
     EmailModule,
     StoresModule,
+    OrdersModule,
   ],
   controllers: [],
   providers: [],

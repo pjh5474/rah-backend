@@ -10,6 +10,7 @@ import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { InternalServerErrorException } from '@nestjs/common';
 import { Store } from 'src/stores/entities/store.entity';
+import { Order } from 'src/orders/entities/order.entity';
 
 export enum UserRole {
   Creator = 'Creator',
@@ -55,6 +56,10 @@ export class User extends CoreEntity {
   @OneToMany((type) => Store, (store) => store.creator)
   @Field((type) => [Store])
   stores: Store[];
+
+  @OneToMany((type) => Order, (order) => order.customer)
+  @Field((type) => [Order])
+  orders: Order[];
 
   @BeforeInsert()
   @BeforeUpdate()
