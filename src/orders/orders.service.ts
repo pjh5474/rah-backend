@@ -1,7 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PubSub } from 'graphql-subscriptions';
-import { NEW_PENDING_ORDER, PUB_SUB } from 'src/common/common.constant';
+import {
+  NEW_ORDER_UPDATE,
+  NEW_PENDING_ORDER,
+  PUB_SUB,
+} from 'src/common/common.constant';
 import { Commission } from 'src/stores/entities/commission.entity';
 import { Store } from 'src/stores/entities/store.entity';
 import { User, UserRole } from 'src/users/entities/user.entity';
@@ -220,7 +224,6 @@ export class OrderService {
     try {
       const order = await this.orders.findOne({
         where: { id: orderId },
-        relations: ['store'],
       });
       if (!order) {
         return {
@@ -268,6 +271,10 @@ export class OrderService {
           status,
         },
       ]);
+
+      const newOrder = { ...order, status };
+
+      await this.pubSub.publish(NEW_ORDER_UPDATE, { orderUpdates: newOrder });
 
       return {
         ok: true,
