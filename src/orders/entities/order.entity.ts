@@ -71,4 +71,8 @@ export class Order extends CoreEntity {
   @Column({ type: 'enum', enum: OrderStatus, default: OrderStatus.Pending })
   @IsEnum(OrderStatus)
   status: OrderStatus;
+
+  @Field((type) => Boolean)
+  @Column({ default: false })
+  isPaid: boolean;
 }
