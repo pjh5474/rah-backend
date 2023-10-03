@@ -18,6 +18,7 @@ import { Commission } from './stores/entities/commission.entity';
 import { OrdersModule } from './orders/orders.module';
 import { Order } from './orders/entities/order.entity';
 import { OrderItem } from './orders/entities/order-item.entity';
+import { CommonModule } from './common/common.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -96,6 +97,7 @@ import { OrderItem } from './orders/entities/order-item.entity';
     EmailModule,
     StoresModule,
     OrdersModule,
+    CommonModule,
   ],
   controllers: [],
   providers: [],
