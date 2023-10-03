@@ -231,11 +231,15 @@ export class OrderService {
 
       let canEdit = true;
       if (user.role === UserRole.Client) {
-        canEdit = false;
+        if (status !== OrderStatus.Canceling) {
+          canEdit = false;
+        }
       }
 
       if (user.role === UserRole.Creator) {
         if (
+          status !== OrderStatus.Rejected &&
+          status !== OrderStatus.Accepted &&
           status !== OrderStatus.Drawing &&
           status !== OrderStatus.Completed &&
           status !== OrderStatus.Canceled
@@ -247,7 +251,7 @@ export class OrderService {
       if (!canEdit) {
         return {
           ok: false,
-          error: "You can't do that.",
+          error: `${user.role} can't edit order status to ${status}`,
         };
       }
 

@@ -22,8 +22,11 @@ import { OrderItem } from './order-item.entity';
 
 export enum OrderStatus {
   Pending = 'Pending',
+  Accepted = 'Accepted',
+  Rejected = 'Rejected',
   Drawing = 'Drawing',
   Completed = 'Completed',
+  Canceling = 'Canceling',
   Canceled = 'Canceled',
 }
 
