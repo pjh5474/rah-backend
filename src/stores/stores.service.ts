@@ -90,14 +90,15 @@ export class StoresService {
         category = await this.categories.getOrCreate(
           editStoreInput.categoryName,
         );
-        await this.stores.save([
-          {
-            id: editStoreInput.storeId,
-            ...editStoreInput,
-            ...(category && { category }), // if category exists, add it to the object
-          },
-        ]);
       }
+
+      await this.stores.save([
+        {
+          id: editStoreInput.storeId,
+          ...editStoreInput,
+          ...(category && { category }), // if category exists, add it to the object
+        },
+      ]);
 
       return {
         ok: true,
