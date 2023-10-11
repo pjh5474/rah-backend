@@ -177,7 +177,6 @@ export class StoresService {
     try {
       const category = await this.categories.findOne({
         where: { slug },
-        relations: ['stores'],
       });
       if (!category) {
         return {
