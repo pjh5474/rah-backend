@@ -93,7 +93,7 @@ export class PaymentService {
     } catch {
       return {
         ok: false,
-        error: 'Could not get payments',
+        error: 'Could not load payments',
       };
     }
   }

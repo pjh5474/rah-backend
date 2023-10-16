@@ -371,8 +371,6 @@ describe('UserService', () => {
         editProfileArgs.input,
       );
 
-      console.log(result);
-
       expect(usersRepository.save).toHaveBeenCalledTimes(1);
       expect(usersRepository.save).toHaveBeenCalledWith(editProfileArgs.input);
       expect(result).toEqual({ ok: true });
