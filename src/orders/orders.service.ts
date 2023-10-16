@@ -66,7 +66,7 @@ export class OrderService {
         if (!commission) {
           return {
             ok: false,
-            error: 'Commission not found.',
+            error: 'Commission not found',
           };
         }
 
@@ -80,7 +80,7 @@ export class OrderService {
           if (!commissionOption) {
             return {
               ok: false,
-              error: `Commission option ${itemOption.name} not found.`,
+              error: `Commission option ${itemOption.name} not found`,
             };
           }
 
@@ -94,7 +94,7 @@ export class OrderService {
             if (!commissionOptionChoice) {
               return {
                 ok: false,
-                error: `Commission option choice ${itemOption.choice} not found.`,
+                error: `Commission option choice ${itemOption.choice} not found`,
               };
             }
 
@@ -176,7 +176,7 @@ export class OrderService {
     } catch {
       return {
         ok: false,
-        error: 'Could not get orders.',
+        error: 'Could not get orders',
       };
     }
   }
@@ -194,14 +194,14 @@ export class OrderService {
       if (!order) {
         return {
           ok: false,
-          error: 'Order not found.',
+          error: 'Order not found',
         };
       }
 
       if (!this.canSeeOrder(user, order)) {
         return {
           ok: false,
-          error: "You cant see other peoples' orders",
+          error: "You can't see other peoples' orders",
         };
       }
 
@@ -228,14 +228,14 @@ export class OrderService {
       if (!order) {
         return {
           ok: false,
-          error: 'Order not found.',
+          error: 'Order not found',
         };
       }
 
       if (!this.canSeeOrder(user, order)) {
         return {
           ok: false,
-          error: "You cant see other peoples' orders",
+          error: "You can't see other peoples' orders",
         };
       }
 
