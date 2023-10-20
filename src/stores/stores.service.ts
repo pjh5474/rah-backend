@@ -216,6 +216,7 @@ export class StoresService {
       const [stores, totalResults] = await this.stores.findAndCount({
         take: 25,
         skip: (page - 1) * 25,
+        relations: ['category'],
       });
 
       return {
