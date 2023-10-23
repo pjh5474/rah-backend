@@ -192,6 +192,7 @@ export class StoresService {
             id: category.id,
           },
         },
+        relations: ['category'],
         take: PAGE_ITEMS,
         skip: (page - 1) * PAGE_ITEMS,
       });
@@ -241,7 +242,7 @@ export class StoresService {
         where: {
           id: storeId,
         },
-        relations: ['commissions'],
+        relations: ['commissions', 'category'],
       });
 
       if (!store) {
