@@ -26,6 +26,7 @@ import {
   DeleteCommissionInput,
   DeleteCommissionOutput,
 } from './dtos/delete-commission.dto';
+import { PAGE_ITEMS } from 'src/common/common.constant';
 
 @Injectable()
 export class StoresService {
@@ -191,8 +192,8 @@ export class StoresService {
             id: category.id,
           },
         },
-        take: 25,
-        skip: (page - 1) * 25,
+        take: PAGE_ITEMS,
+        skip: (page - 1) * PAGE_ITEMS,
       });
 
       const totalResults = await this.countStores(category);
@@ -201,7 +202,7 @@ export class StoresService {
         ok: true,
         category,
         stores,
-        totalPages: Math.ceil(totalResults / 25),
+        totalPages: Math.ceil(totalResults / PAGE_ITEMS),
       };
     } catch {
       return {
@@ -214,15 +215,15 @@ export class StoresService {
   async allStores({ page }: StoresInput): Promise<StoresOutput> {
     try {
       const [stores, totalResults] = await this.stores.findAndCount({
-        take: 25,
-        skip: (page - 1) * 25,
+        take: PAGE_ITEMS,
+        skip: (page - 1) * PAGE_ITEMS,
         relations: ['category'],
       });
 
       return {
         ok: true,
         results: stores,
-        totalPages: Math.ceil(totalResults / 25),
+        totalPages: Math.ceil(totalResults / PAGE_ITEMS),
         totalResults,
       };
     } catch {
@@ -270,14 +271,14 @@ export class StoresService {
         where: {
           name: ILike(`%${query}%`),
         },
-        take: 25,
-        skip: (page - 1) * 25,
+        take: PAGE_ITEMS,
+        skip: (page - 1) * PAGE_ITEMS,
       });
 
       return {
         ok: true,
         stores,
-        totalPages: Math.ceil(totalResults / 25),
+        totalPages: Math.ceil(totalResults / PAGE_ITEMS),
         totalResults,
       };
     } catch {

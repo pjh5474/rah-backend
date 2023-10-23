@@ -7,6 +7,7 @@ import { Commission } from './entities/commission.entity';
 import { Category } from './entities/category.entity';
 import { User, UserRole } from 'src/users/entities/user.entity';
 import { CategoryRepository } from './repositories/category.repository';
+import { PAGE_ITEMS } from 'src/common/common.constant';
 
 const mockRepository = () => ({
   find: jest.fn(),
@@ -393,7 +394,7 @@ describe('StoresService', () => {
             id: category.id,
           },
         },
-        take: 25,
+        take: PAGE_ITEMS,
         skip: 0,
       });
 
@@ -430,7 +431,8 @@ describe('StoresService', () => {
 
       expect(storesRepository.findAndCount).toHaveBeenCalledTimes(1);
       expect(storesRepository.findAndCount).toHaveBeenCalledWith({
-        take: 25,
+        relations: ['category'],
+        take: PAGE_ITEMS,
         skip: 0,
       });
       expect(result).toEqual({
@@ -512,7 +514,7 @@ describe('StoresService', () => {
         where: {
           name: ILike(`%${query}%`),
         },
-        take: 25,
+        take: PAGE_ITEMS,
         skip: 0,
       });
 
