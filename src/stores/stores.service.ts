@@ -203,6 +203,7 @@ export class StoresService {
         category,
         stores,
         totalPages: Math.ceil(totalResults / PAGE_ITEMS),
+        totalResults,
       };
     } catch {
       return {
