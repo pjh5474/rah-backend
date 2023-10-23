@@ -271,6 +271,7 @@ export class StoresService {
         where: {
           name: ILike(`%${query}%`),
         },
+        relations: ['category'],
         take: PAGE_ITEMS,
         skip: (page - 1) * PAGE_ITEMS,
       });

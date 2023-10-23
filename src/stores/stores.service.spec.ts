@@ -514,6 +514,7 @@ describe('StoresService', () => {
         where: {
           name: ILike(`%${query}%`),
         },
+        relations: ['category'],
         take: PAGE_ITEMS,
         skip: 0,
       });
