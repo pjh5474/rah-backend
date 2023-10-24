@@ -27,6 +27,7 @@ import {
   DeleteCommissionOutput,
 } from './dtos/delete-commission.dto';
 import { PAGE_ITEMS } from 'src/common/common.constant';
+import { MyStoresOutput } from './dtos/myStores.dto';
 
 @Injectable()
 export class StoresService {
@@ -60,6 +61,27 @@ export class StoresService {
       return {
         ok: false,
         error: 'Could not create store',
+      };
+    }
+  }
+
+  async myStores(creator: User): Promise<MyStoresOutput> {
+    try {
+      const stores = await this.stores.find({
+        where: {
+          creator: {
+            id: creator.id,
+          },
+        },
+      });
+      return {
+        stores,
+        ok: true,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not find Stores.',
       };
     }
   }
