@@ -73,6 +73,7 @@ export class StoresService {
             id: creator.id,
           },
         },
+        relations: ['category'],
       });
       return {
         stores,
