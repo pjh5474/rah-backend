@@ -394,6 +394,7 @@ describe('StoresService', () => {
             id: category.id,
           },
         },
+        relations: ['category'],
         take: PAGE_ITEMS,
         skip: 0,
       });
@@ -404,6 +405,7 @@ describe('StoresService', () => {
         ok: true,
         category,
         totalPages: 1,
+        totalResults: 1,
         stores: [new Store()],
       });
     });
@@ -463,7 +465,7 @@ describe('StoresService', () => {
       expect(storesRepository.findOne).toHaveBeenCalledTimes(1);
       expect(storesRepository.findOne).toHaveBeenCalledWith({
         where: { id: 1 },
-        relations: ['commissions'],
+        relations: ['commissions', 'category'],
       });
 
       expect(result).toEqual({
@@ -480,7 +482,7 @@ describe('StoresService', () => {
       expect(storesRepository.findOne).toHaveBeenCalledTimes(1);
       expect(storesRepository.findOne).toHaveBeenCalledWith({
         where: { id: 1 },
-        relations: ['commissions'],
+        relations: ['commissions', 'category'],
       });
 
       expect(result).toEqual({

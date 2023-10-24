@@ -29,6 +29,11 @@ export class Store extends CoreEntity {
   @Field((type) => Category)
   category: Category;
 
+  @Field((type) => String, { nullable: true })
+  @Column({ nullable: true })
+  @IsString()
+  description?: string;
+
   @ManyToOne((type) => User, (user) => user.stores, {
     onDelete: 'CASCADE',
   })
