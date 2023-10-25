@@ -35,6 +35,7 @@ import {
   DeleteCommissionOutput,
 } from './dtos/delete-commission.dto';
 import { MyStoresOutput } from './dtos/myStores.dto';
+import { MyStoreInput, MyStoreOutput } from './dtos/myStore.dto';
 
 @Resolver((of) => Store)
 export class StoresResolver {
@@ -47,6 +48,15 @@ export class StoresResolver {
     @Args('input') createStoreInput: CreateStoreInput,
   ): Promise<CreateStoreOutput> {
     return this.storesService.createStore(authUser, createStoreInput);
+  }
+
+  @Query((returns) => MyStoreOutput)
+  @Role(['Creator'])
+  myStore(
+    @AuthUser() creator: User,
+    @Args('input') myStoreInput: MyStoreInput,
+  ): Promise<MyStoreOutput> {
+    return this.storesService.myStore(creator, myStoreInput);
   }
 
   @Query((returns) => MyStoresOutput)
