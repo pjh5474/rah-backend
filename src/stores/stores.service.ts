@@ -56,6 +56,7 @@ export class StoresService {
       await this.stores.save(newStore);
       return {
         ok: true,
+        storeId: newStore.id,
       };
     } catch {
       return {
