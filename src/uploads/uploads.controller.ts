@@ -12,6 +12,12 @@ export class UploadsController {
   @Post('')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(@UploadedFile() file) {
+    // check if file is image
+    const isImage = file.mimetype.includes('image');
+    if (!isImage) {
+      return { ok: false, error: 'Please upload only images' };
+    }
+
     AWS.config.update({
       credentials: {
         accessKeyId: process.env.AWS_ACCESS_KEY,
@@ -32,7 +38,7 @@ export class UploadsController {
       return { url: fileUrl };
     } catch (e) {
       console.log(e);
-      return null;
+      return { ok: false, error: 'Cant upload file to s3' };
     }
   }
 }
