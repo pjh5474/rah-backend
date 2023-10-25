@@ -38,6 +38,9 @@ import { UploadsModule } from './uploads/uploads.module';
         PRIVATE_KEY: Joi.string().required(),
         EMAIL_USER: Joi.string().required(),
         EMAIL_APP_PASSWORD: Joi.string().required(),
+        AWS_ACCESS_KEY: Joi.string().required(),
+        AWS_SECRET_ACCESS_KEY: Joi.string().required(),
+        AWS_BUCKET_NAME: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRoot({
