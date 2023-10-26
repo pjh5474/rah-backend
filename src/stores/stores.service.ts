@@ -76,7 +76,7 @@ export class StoresService {
             id: creator.id,
           },
         },
-        relations: ['category', 'commissions'],
+        relations: ['category', 'commissions', 'orders'],
       });
       return {
         ok: true,
