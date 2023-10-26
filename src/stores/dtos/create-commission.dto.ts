@@ -6,6 +6,7 @@ import { Commission } from '../entities/commission.entity';
 export class CreateCommissionInput extends PickType(Commission, [
   'name',
   'price',
+  'photo',
   'description',
   'options',
 ]) {
