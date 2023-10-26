@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Post,
   UploadedFile,
@@ -11,8 +12,9 @@ import * as AWS from 'aws-sdk';
 export class UploadsController {
   @Post('')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadFile(@UploadedFile() file) {
+  async uploadFile(@UploadedFile() file, @Body() body) {
     // check if file is image
+    const targetFolder = body.targetFolder;
     const isImage = file.mimetype.includes('image');
     if (!isImage) {
       return { ok: false, error: 'Please upload only images' };
@@ -30,7 +32,7 @@ export class UploadsController {
       const { Location: fileUrl } = await new AWS.S3()
         .upload({
           Body: file.buffer,
-          Bucket: process.env.AWS_BUCKET_NAME,
+          Bucket: `${process.env.AWS_BUCKET_NAME}/${targetFolder}`,
           Key: objectName,
           ACL: 'public-read',
         })
