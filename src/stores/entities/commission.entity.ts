@@ -57,7 +57,7 @@ export class Commission extends CoreEntity {
   @Field((type) => String, { nullable: true })
   @Column({ nullable: true })
   @IsString()
-  @Length(30)
+  @Length(5, 30)
   description?: string;
 
   @Field((type) => [CommissionOption], { nullable: true })
