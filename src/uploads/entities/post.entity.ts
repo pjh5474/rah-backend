@@ -18,11 +18,6 @@ export class Post extends CoreEntity {
   @IsString()
   content: string;
 
-  @Field((type) => [String], { nullable: true })
-  @Column('text', { array: true, nullable: true, default: [] })
-  @IsArray()
-  images?: string[];
-
   @OneToOne((type) => Commission, (commission) => commission.post, {
     onDelete: 'CASCADE',
     nullable: true,

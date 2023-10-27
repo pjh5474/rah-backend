@@ -21,7 +21,7 @@ export class PostsService {
 
   async createPost(
     creator: User,
-    { title, content, images, commissionId }: CreatePostInput,
+    { title, content, commissionId }: CreatePostInput,
   ): Promise<CreatePostOutput> {
     try {
       const commission = await this.commissions.findOne({
@@ -46,7 +46,6 @@ export class PostsService {
       const newPost = this.posts.create({
         title,
         content,
-        images,
         commission,
       });
 

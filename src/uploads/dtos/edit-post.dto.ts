@@ -12,7 +12,6 @@ import { CoreOutput } from 'src/common/dtos/output.dto';
 export class EditPostInput extends PickType(PartialType(Post), [
   'title',
   'content',
-  'images',
 ]) {
   @Field((type) => Number)
   postId: number;

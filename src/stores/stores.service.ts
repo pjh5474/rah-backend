@@ -29,6 +29,10 @@ import {
 import { PAGE_ITEMS } from 'src/common/common.constant';
 import { MyStoresOutput } from './dtos/myStores.dto';
 import { MyStoreInput, MyStoreOutput } from './dtos/myStore.dto';
+import {
+  GetCommissionInput,
+  GetCommissionOutput,
+} from './dtos/get-commission.dto';
 
 @Injectable()
 export class StoresService {
@@ -464,6 +468,40 @@ export class StoresService {
       return {
         ok: false,
         error: 'Could not edit commission',
+      };
+    }
+  }
+
+  async getCommissionsById({
+    id: commissionId,
+  }: GetCommissionInput): Promise<GetCommissionOutput> {
+    try {
+      const commission = await this.commissions.findOne({
+        where: {
+          id: commissionId,
+        },
+        relations: ['post'],
+      });
+
+      if (!commission) {
+        return {
+          ok: false,
+          error: 'Commission not found',
+        };
+      }
+
+      const post = await commission.post;
+
+      return {
+        ok: true,
+        commission,
+        post,
+      };
+    } catch (e) {
+      console.log(e);
+      return {
+        ok: false,
+        error: 'Could not get commission',
       };
     }
   }

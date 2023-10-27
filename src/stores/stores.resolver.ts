@@ -36,6 +36,10 @@ import {
 } from './dtos/delete-commission.dto';
 import { MyStoresOutput } from './dtos/myStores.dto';
 import { MyStoreInput, MyStoreOutput } from './dtos/myStore.dto';
+import {
+  GetCommissionInput,
+  GetCommissionOutput,
+} from './dtos/get-commission.dto';
 
 @Resolver((of) => Store)
 export class StoresResolver {
@@ -152,5 +156,13 @@ export class CommissionResolver {
     @Args('input') editcommissionInput: EditCommissionInput,
   ): Promise<EditCommissionOutput> {
     return this.storesService.editCommission(authUser, editcommissionInput);
+  }
+
+  @Query((returns) => GetCommissionOutput)
+  @Role(['Any'])
+  getCommission(
+    @Args('input') getCommissionInput: GetCommissionInput,
+  ): Promise<GetCommissionOutput> {
+    return this.storesService.getCommissionsById(getCommissionInput);
   }
 }
