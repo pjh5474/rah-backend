@@ -45,10 +45,10 @@ export class UploadsController {
     }
   }
 
-  @Post('upload-post')
+  @Post('postImages')
   @UseInterceptors(FilesInterceptor('images', 5))
   async uploadImages(@UploadedFiles() images, @Body() body) {
-    if (images || images.length === 0) {
+    if (images && images.length === 0) {
       return;
     }
 
@@ -64,7 +64,7 @@ export class UploadsController {
 
     const params = {
       Bucket: process.env.AWS_BUCKET_NAME,
-      Prefix: targetFolder,
+      Prefix: `commissionPhoto/${targetFolder}/`,
     };
 
     const s3 = new AWS.S3();
@@ -75,7 +75,7 @@ export class UploadsController {
         await s3
           .putObject({
             Bucket: process.env.AWS_BUCKET_NAME,
-            Key: `${targetFolder}/`,
+            Key: `commissionPhoto/${targetFolder}/`,
           })
           .promise();
       }
@@ -91,7 +91,7 @@ export class UploadsController {
         const { Location: fileUrl } = await s3
           .upload({
             Body: image.buffer,
-            Bucket: `${process.env.AWS_BUCKET_NAME}/${targetFolder}`,
+            Bucket: `${process.env.AWS_BUCKET_NAME}/commissionPhoto/${targetFolder}`,
             Key: objectName,
             ACL: 'public-read',
           })
@@ -102,6 +102,51 @@ export class UploadsController {
     } catch (e) {
       console.log(e);
       return { ok: false, error: 'Cant upload file to s3' };
+    }
+  }
+
+  @Post('delPostImages')
+  @UseInterceptors(FileInterceptor('file'))
+  async deleteFile(@Body() body) {
+    const targetFolder = body.targetFolder;
+
+    AWS.config.update({
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      },
+      region: 'ap-northeast-2',
+    });
+
+    if (!targetFolder) {
+      return { ok: false, error: 'No target folder' };
+    }
+
+    try {
+      const s3 = new AWS.S3();
+      const params = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Prefix: `commissionPhoto/${targetFolder}/`,
+      };
+      const objects = await s3.listObjectsV2(params).promise();
+      if (!objects.Contents.length) {
+        return { ok: false, error: 'No files' };
+      }
+
+      const deleteParams = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Delete: { Objects: [] },
+      };
+
+      objects.Contents.forEach((content) => {
+        deleteParams.Delete.Objects.push({ Key: content.Key });
+      });
+
+      await s3.deleteObjects(deleteParams).promise();
+
+      return { ok: true };
+    } catch (e) {
+      return { ok: false, error: 'Cant delete files from s3' };
     }
   }
 }
