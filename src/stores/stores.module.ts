@@ -10,9 +10,10 @@ import { StoresService } from './stores.service';
 import { Category } from './entities/category.entity';
 import { CategoryRepository } from './repositories/category.repository';
 import { Commission } from './entities/commission.entity';
+import { Post } from 'src/uploads/entities/post.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Store, Category, Commission])],
+  imports: [TypeOrmModule.forFeature([Store, Category, Commission, Post])],
   providers: [
     StoresResolver,
     StoresService,

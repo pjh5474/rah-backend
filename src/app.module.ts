@@ -22,6 +22,7 @@ import { CommonModule } from './common/common.module';
 import { PaymentsModule } from './payments/payments.module';
 import { Payment } from './payments/entities/payment.entity';
 import { UploadsModule } from './uploads/uploads.module';
+import { Post } from './uploads/entities/post.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -62,6 +63,7 @@ import { UploadsModule } from './uploads/uploads.module';
         Order,
         OrderItem,
         Payment,
+        Post,
       ],
     }),
     GraphQLModule.forRoot({

@@ -1,8 +1,16 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { IsNumber, IsString } from 'class-validator';
 import { CoreEntity } from 'src/common/entities/core.entity';
-import { Column, Entity, ManyToOne, RelationId } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  RelationId,
+} from 'typeorm';
 import { Store } from './store.entity';
+import { Post } from 'src/uploads/entities/post.entity';
 
 @InputType('CommissionChoiceInputType', { isAbstract: true })
 @ObjectType()
@@ -63,4 +71,12 @@ export class Commission extends CoreEntity {
 
   @RelationId((commission: Commission) => commission.store)
   storeId: number;
+
+  @OneToOne((type) => Post)
+  @JoinColumn()
+  @Field((type) => Post)
+  post: Post;
+
+  @RelationId((commission: Commission) => commission.post)
+  postId: number;
 }
