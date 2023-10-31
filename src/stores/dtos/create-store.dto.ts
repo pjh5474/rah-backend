@@ -14,6 +14,6 @@ export class CreateStoreInput extends PickType(Store, [
 
 @ObjectType()
 export class CreateStoreOutput extends CoreOutput {
-  @Field((type) => Int)
+  @Field((type) => Int, { nullable: true })
   storeId?: number;
 }

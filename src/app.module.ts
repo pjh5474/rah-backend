@@ -23,6 +23,9 @@ import { PaymentsModule } from './payments/payments.module';
 import { Payment } from './payments/entities/payment.entity';
 import { UploadsModule } from './uploads/uploads.module';
 import { Post } from './uploads/entities/post.entity';
+import { ChatsModule } from './chats/chats.module';
+import { ChatRoom } from './chats/entities/chatroom.entity';
+import { Chat } from './chats/entities/chat.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -64,6 +67,8 @@ import { Post } from './uploads/entities/post.entity';
         OrderItem,
         Payment,
         Post,
+        ChatRoom,
+        Chat,
       ],
     }),
     GraphQLModule.forRoot({
@@ -109,6 +114,7 @@ import { Post } from './uploads/entities/post.entity';
     CommonModule,
     PaymentsModule,
     UploadsModule,
+    ChatsModule,
   ],
   controllers: [],
   providers: [],

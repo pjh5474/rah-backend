@@ -12,6 +12,8 @@ import { InternalServerErrorException } from '@nestjs/common';
 import { Store } from 'src/stores/entities/store.entity';
 import { Order } from 'src/orders/entities/order.entity';
 import { Payment } from 'src/payments/entities/payment.entity';
+import { ChatRoom } from 'src/chats/entities/chatroom.entity';
+import { Chat } from 'src/chats/entities/chat.entity';
 
 export enum UserRole {
   Creator = 'Creator',
@@ -65,6 +67,12 @@ export class User extends CoreEntity {
   @OneToMany((type) => Payment, (payment) => payment.user)
   @Field((type) => [Payment])
   payments: Payment[];
+
+  @Field((type) => [ChatRoom], { nullable: true })
+  chatRooms?: ChatRoom[];
+
+  @Field((type) => [Chat], { nullable: true })
+  chats?: Chat[];
 
   @BeforeInsert()
   @BeforeUpdate()

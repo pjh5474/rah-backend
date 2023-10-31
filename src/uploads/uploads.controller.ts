@@ -52,6 +52,7 @@ export class UploadsController {
       return;
     }
 
+    const mainFolder = body.mainFolder;
     const targetFolder = body.targetFolder;
 
     AWS.config.update({
@@ -64,7 +65,7 @@ export class UploadsController {
 
     const params = {
       Bucket: process.env.AWS_BUCKET_NAME,
-      Prefix: `commissionPhoto/${targetFolder}/`,
+      Prefix: `${mainFolder}/${targetFolder}/`,
     };
 
     const s3 = new AWS.S3();
@@ -75,7 +76,7 @@ export class UploadsController {
         await s3
           .putObject({
             Bucket: process.env.AWS_BUCKET_NAME,
-            Key: `commissionPhoto/${targetFolder}/`,
+            Key: `${mainFolder}/${targetFolder}/`,
           })
           .promise();
       }
@@ -91,7 +92,7 @@ export class UploadsController {
         const { Location: fileUrl } = await s3
           .upload({
             Body: image.buffer,
-            Bucket: `${process.env.AWS_BUCKET_NAME}/commissionPhoto/${targetFolder}`,
+            Bucket: `${process.env.AWS_BUCKET_NAME}/${mainFolder}/${targetFolder}`,
             Key: objectName,
             ACL: 'public-read',
           })

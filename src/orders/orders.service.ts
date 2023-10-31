@@ -4,6 +4,7 @@ import { PubSub } from 'graphql-subscriptions';
 import {
   NEW_ORDER_UPDATE,
   NEW_PENDING_ORDER,
+  PAGE_ITEMS,
   PUB_SUB,
 } from 'src/common/common.constant';
 import { Commission } from 'src/stores/entities/commission.entity';
@@ -147,8 +148,8 @@ export class OrderService {
             },
             ...(status && { status }),
           },
-          take: 25,
-          skip: (page - 1) * 25,
+          take: PAGE_ITEMS,
+          skip: (page - 1) * PAGE_ITEMS,
         });
       } else if (user.role === UserRole.Creator) {
         const stores = await this.stores.find({
@@ -166,7 +167,7 @@ export class OrderService {
           orders = orders.filter((order) => order.status === status);
         }
 
-        orders = orders.slice((page - 1) * 25, page * 25);
+        orders = orders.slice((page - 1) * PAGE_ITEMS, page * PAGE_ITEMS);
       }
 
       return {
