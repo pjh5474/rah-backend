@@ -43,6 +43,13 @@ export class PostsService {
         };
       }
 
+      if (commission.post) {
+        return {
+          ok: false,
+          error: 'Post already exists',
+        };
+      }
+
       const newPost = this.posts.create({
         title,
         content,
@@ -50,6 +57,11 @@ export class PostsService {
       });
 
       await this.posts.save(newPost);
+
+      await this.commissions.save({
+        id: commissionId,
+        post: newPost,
+      });
 
       return {
         ok: true,

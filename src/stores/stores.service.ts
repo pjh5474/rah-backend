@@ -397,7 +397,7 @@ export class StoresService {
         where: {
           id: commissionId,
         },
-        relations: ['store'],
+        relations: ['store', 'post'],
       });
 
       if (!commission) {
@@ -416,6 +416,7 @@ export class StoresService {
       }
 
       await this.commissions.delete(commissionId);
+
       return {
         ok: true,
       };

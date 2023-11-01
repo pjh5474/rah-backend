@@ -1,8 +1,8 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
-import { IsArray, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 import { CoreEntity } from 'src/common/entities/core.entity';
 import { Commission } from 'src/stores/entities/commission.entity';
-import { Column, Entity, OneToOne, RelationId } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, RelationId } from 'typeorm';
 
 @InputType('PostInputType', { isAbstract: true })
 @ObjectType()
@@ -20,8 +20,8 @@ export class Post extends CoreEntity {
 
   @OneToOne((type) => Commission, (commission) => commission.post, {
     onDelete: 'CASCADE',
-    nullable: true,
   })
+  @JoinColumn()
   @Field((type) => Commission)
   commission: Commission;
 

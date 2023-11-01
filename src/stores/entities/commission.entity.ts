@@ -73,10 +73,10 @@ export class Commission extends CoreEntity {
   @RelationId((commission: Commission) => commission.store)
   storeId: number;
 
-  @OneToOne((type) => Post)
+  @OneToOne((type) => Post, { onDelete: 'SET NULL', nullable: true })
   @JoinColumn()
-  @Field((type) => Post)
-  post: Post;
+  @Field((type) => Post, { nullable: true })
+  post?: Post;
 
   @RelationId((commission: Commission) => commission.post)
   postId: number;
